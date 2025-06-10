@@ -31,8 +31,8 @@ I’m a driven innovator in the realms of Web Development 🌐, Generative AI �
 "Think of me as an infinite loop of learning, collaboration, and execution — with a breakpoint only at excellence."
 
 <p align="center">
-  <a href="https://chat.openai.com/sandbox/mnt/data/Lokesh%20agarwal%20.pdf" target="_blank">
-    <img src="https://img.shields.io/badge/Download%20Resume-%23FF6F00.svg?&style=for-the-badge&logo=googledrive&logoColor=white" alt="Download Resume"/>
+  <a href="https://drive.google.com/file/d/1c-iU2W16wJ9vGUv-BvLtyDVUVMOZMHHY/view?usp=sharing" target="_blank">
+    <img src="https://img.shields.io/badge/📄 Download%20Resume-FF6F00?style=for-the-badge&logo=google-drive&logoColor=white" alt="Lokesh Agarwal Resume" />
   </a>
 </p>
 
