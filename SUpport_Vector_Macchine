@@ -1,0 +1,141 @@
+
+Support Vector Machines (SVMs) are supervised learning models for classification/regression. They work by finding the hyperplane that maximizes the margin between classes. SVMs support both **linear** separation and **non-linear** via kernel functions ([github.com][1], [en.wikipedia.org][2]).
+
+---
+
+## 🚀 Quick Start
+
+1. Pick your language below
+2. Follow the “Installation” steps
+3. Run the sample
+4. Explore & tweak hyperparameters (C, kernel, gamma)
+
+---
+
+## 🔍 Table of Contents
+
+* [Python](#python)
+* [Java](#java)
+* [C (LIBSVM)](#c-libsvm)
+* [Comparison](#comparison)
+* [References](#references)
+
+---
+
+## 🐍 Python
+
+### Installation
+
+```bash
+pip install numpy scikit-learn
+```
+
+### Code (Python)
+
+```python
+import numpy as np
+from sklearn import datasets
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+
+iris = datasets.load_iris()
+X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+scaler = StandardScaler().fit(X_train)
+X_train, X_test = scaler.transform(X_train), scaler.transform(X_test)
+
+model = SVC(kernel='linear', C=1.0, gamma='scale')
+model.fit(X_train, y_train)
+print("Accuracy:", model.score(X_test, y_test))
+```
+
+---
+
+## ☕ Java
+
+### Prerequisites
+
+* Add [Weka](https://www.cs.waikato.ac.nz/ml/weka/) or LIBSVM Java binding to your classpath.
+
+### Code (Java)
+
+```java
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
+import weka.classifiers.functions.SMO;
+
+public class SVMExample {
+    public static void main(String[] args) throws Exception {
+        Instances data = DataSource.read("iris.arff");
+        data.setClassIndex(data.numAttributes() - 1);
+        SMO svm = new SMO();
+        svm.buildClassifier(data);
+        System.out.println(svm);
+    }
+}
+```
+
+---
+
+## 🖥️ C (LIBSVM)
+
+### Setup
+
+1. Download and compile LIBSVM ([gittk.cs.kobe-u.ac.jp][3], [github.com][4], [en.wikipedia.org][5]).
+2. Include headers and link with `libsvm.a`.
+
+### Code (C)
+
+```c
+#include "svm.h"
+#include <stdio.h>
+
+int main() {
+    struct svm_problem prob;
+    struct svm_parameter param = {0};
+    // Fill prob.l, prob.y, prob.x[]
+    param.svm_type = C_SVC;
+    param.kernel_type = LINEAR;
+    param.C = 1;
+    
+    struct svm_model *model = svm_train(&prob, &param);
+    svm_save_model("model.svm", model);
+
+    svm_free_and_destroy_model(&model);
+    return 0;
+}
+```
+
+> For detailed C/C++ example including parsing, refer to the official LIBSVM docs .
+
+---
+
+## 📊 Comparison
+
+| Feature        | Python (scikit-learn) | Java (Weka/LIBSVM) | C (LIBSVM) |
+| -------------- | --------------------- | ------------------ | ---------- |
+| Ease of Use    | ⭐⭐⭐⭐⭐                 | ⭐⭐☆☆☆              | ⭐☆☆☆☆      |
+| Performance    | ⭐⭐⭐⭐☆                 | ⭐⭐⭐⭐☆              | ⭐⭐⭐⭐⭐      |
+| Flexibility    | ⭐⭐⭐⭐☆                 | ⭐⭐⭐☆☆              | ⭐⭐⭐⭐☆      |
+| Setup Overhead | Low                   | Medium             | High       |
+
+---
+
+## ✅ Usage Tips
+
+* **Scale data** (e.g., z-score) before training ([en.wikipedia.org][2])
+* **Hyperparameter tuning**:
+
+  * Use grid search for `C` and `gamma`
+  * Common ranges: `C`, `gamma` from 2⁻⁵…2¹⁵ ([en.wikipedia.org][2])
+* **Kernels**:
+
+  * Linear, polynomial, RBF, sigmoid
+
+---
+
+## 🔗 References
+
+* scikit-learn SVM ([github.com][4], [geeksforgeeks.org][6])
+* LIBSVM library & binding details ([en.wikipedia.org][5])
+* SVM kernel theory ([geeksforgeeks.org][6])
