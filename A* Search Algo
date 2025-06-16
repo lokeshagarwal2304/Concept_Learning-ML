@@ -1,0 +1,245 @@
+# 🚀 A* Search Algorithm Code Viewer
+
+An interactive visualizer that lets you view A* Search Algorithm implementations in multiple languages — **Python, C++, Java, and C**. Easily switch between languages using the dropdown selector.
+
+## 🔍 What is A*?
+
+A* (A-Star) is a popular pathfinding and graph traversal algorithm. It uses a combination of:
+
+- `g(n)` → cost from the start node to current node
+- `h(n)` → estimated cost from current to goal (heuristic)
+- `f(n) = g(n) + h(n)`
+
+The node with the lowest `f(n)` is picked at every step.
+
+---
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A* Search Algorithm Code Viewer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00e6e6;
+      font-size: 2.5rem;
+    }
+
+    select {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      background-color: #2d2d44;
+      color: #fff;
+      border: none;
+    }
+
+    pre {
+      text-align: left;
+      margin: 30px auto;
+      background-color: #2a2a3c;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 900px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>A* Search Code Viewer</h1>
+  <label for="language">Choose Language:</label>
+  <select id="language" onchange="showCode()">
+    <option value="python">Python</option>
+    <option value="java">Java</option>
+    <option value="cpp">C++</option>
+    <option value="c">C</option>
+  </select>
+
+  <pre id="code-block">
+// Select a language to view A* Search Algorithm code here.
+  </pre>
+
+  <script>
+    const codeSnippets = {
+      python: `
+import heapq
+
+def astar(start, goal, graph, heuristic):
+    open_set = [(0, start)]
+    g_score = {start: 0}
+    came_from = {}
+
+    while open_set:
+        _, current = heapq.heappop(open_set)
+        if current == goal:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            return path[::-1]
+
+        for neighbor in graph[current]:
+            tentative_g = g_score[current] + graph[current][neighbor]
+            if neighbor not in g_score or tentative_g < g_score[neighbor]:
+                g_score[neighbor] = tentative_g
+                f = tentative_g + heuristic[neighbor]
+                heapq.heappush(open_set, (f, neighbor))
+                came_from[neighbor] = current
+    return []
+      `,
+      java: `
+import java.util.*;
+
+public class AStar {
+    static class Node {
+        String name;
+        int f, g, h;
+        Node parent;
+
+        Node(String name, int g, int h, Node parent) {
+            this.name = name;
+            this.g = g;
+            this.h = h;
+            this.f = g + h;
+            this.parent = parent;
+        }
+    }
+
+    // Add graph logic and heuristic handling here (simplified for display)
+}
+      `,
+      cpp: `
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef pair<int, int> pii;
+
+void astar(map<int, vector<pii>>& graph, int start, int goal, map<int, int>& heuristic) {
+    priority_queue<pii, vector<pii>, greater<pii>> open;
+    map<int, int> g;
+    map<int, int> came_from;
+    g[start] = 0;
+    open.push({heuristic[start], start});
+
+    while (!open.empty()) {
+        int current = open.top().second;
+        open.pop();
+
+        if (current == goal) break;
+
+        for (auto [neighbor, cost] : graph[current]) {
+            int tentative_g = g[current] + cost;
+            if (!g.count(neighbor) || tentative_g < g[neighbor]) {
+                g[neighbor] = tentative_g;
+                int f = tentative_g + heuristic[neighbor];
+                open.push({f, neighbor});
+                came_from[neighbor] = current;
+            }
+        }
+    }
+}
+      `,
+      c: `
+// A* in C - Basic Structure
+#include <stdio.h>
+// Include queue, heuristic, and graph structure here
+
+int main() {
+    printf("A* Search in C - implement open list, g/h/f values and path reconstruction.");
+    return 0;
+}
+      `
+    };
+
+    function showCode() {
+      const lang = document.getElementById("language").value;
+      document.getElementById("code-block").textContent = codeSnippets[lang];
+    }
+  </script>
+</body>
+</html>
+```
+
+```markdown
+
+
+## 🌐 Features
+
+- 🔧 Multi-language Code Viewer: Python, Java, C++, C
+- 🎨 Stylish UI using HTML + CSS
+- 🧠 Understand the A* algorithm better by viewing its syntax in your preferred language
+
+---
+
+## 📘 How to Use
+
+1. Open `index.html` in your browser.
+2. Select a language from the dropdown.
+3. The corresponding A* algorithm code will be displayed instantly.
+
+---
+
+## 👨‍💻 Supported Languages
+
+- [x] Python  
+- [x] Java  
+- [x] C++  
+- [x] C
+
+---
+
+## 📂 Project Structure
+
+```
+
+📁 a-star-code-viewer/
+│
+├── index.html        # Main UI
+├── styles.css        # (Inline or extract styles if needed)
+└── README.md         # You're here!
+
+```
+
+---
+
+## 📈 Future Improvements
+
+- Add live execution using WebAssembly or JS interpreters
+- Support for other algorithms like Dijkstra, BFS, DFS
+- Visual grid/pathfinding animations
+
+---
+
+## 🏁 Demo
+
+> *Coming Soon: Hosted version on GitHub Pages or Vercel.*
+
+---
+
+## 🤝 Contribute
+
+Feel free to fork and extend the functionality — like adding more languages, algorithms, or editor features!
+
+---
+
+## 📜 License
+
+MIT License
+
+---
+
+**Built with ❤️ by [Lokesh Agarwal](https://github.com/lokeshagarwal2304)**
+
+```
