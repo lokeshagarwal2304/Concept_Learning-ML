@@ -1,0 +1,90 @@
+import java.util.*;
+
+public class BaggingClassifier {
+    private List<DecisionTree> trees;
+    private int numTrees;
+    private int sampleSize;
+    private Random random;
+
+    class DecisionTree {
+        Node root;
+
+        class Node {
+            int featureIndex;
+            double threshold;
+            Node left, right;
+            int label;
+
+            public boolean isLeaf() {
+                return left == null && right == null;
+            }
+        }
+
+        public void train(double[][] X, int[] y) {
+            root = new Node();
+            root.label = majorityVote(y);
+        }
+
+        public int predict(double[] x) {
+            return root.label;
+        }
+
+        private int majorityVote(int[] y) {
+            Map<Integer, Integer> counts = new HashMap<>();
+            for (int label : y) {
+                counts.put(label, counts.getOrDefault(label, 0) + 1);
+            }
+            return Collections.max(counts.entrySet(), Map.Entry.comparingByValue()).getKey();
+        }
+    }
+
+    public BaggingClassifier(int numTrees, int sampleSize) {
+        this.numTrees = numTrees;
+        this.sampleSize = sampleSize;
+        this.trees = new ArrayList<>();
+        this.random = new Random();
+    }
+
+    public void fit(double[][] X, int[] y) {
+        int n = X.length;
+        if (sampleSize <= 0) sampleSize = n;
+
+        trees.clear();
+        for (int i = 0; i < numTrees; i++) {
+            double[][] X_sample = new double[sampleSize][X[0].length];
+            int[] y_sample = new int[sampleSize];
+
+            for (int j = 0; j < sampleSize; j++) {
+                int idx = random.nextInt(n);
+                X_sample[j] = X[idx];
+                y_sample[j] = y[idx];
+            }
+
+            DecisionTree tree = new DecisionTree();
+            tree.train(X_sample, y_sample);
+            trees.add(tree);
+        }
+    }
+
+    public int predict(double[] x) {
+        Map<Integer, Integer> votes = new HashMap<>();
+
+        for (DecisionTree tree : trees) {
+            int prediction = tree.predict(x);
+            votes.put(prediction, votes.getOrDefault(prediction, 0) + 1);
+        }
+
+        return Collections.max(votes.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+
+    public static void main(String[] args) {
+        double[][] X = {{5.1, 3.5}, {4.9, 3.0}, {6.0, 2.7}, {5.8, 2.8}, {6.2, 2.9}};
+        int[] y = {0, 0, 1, 1, 1};
+
+        BaggingClassifier bagger = new BaggingClassifier(10, 4);
+        bagger.fit(X, y);
+
+        double[] testSample = {5.7, 3.0};
+        System.out.println("Predicted class: " + bagger.predict(testSample));
+    }
+}
