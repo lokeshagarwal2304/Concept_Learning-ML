@@ -1,0 +1,87 @@
+### ✅ **1. Reading a Text File**
+
+```python
+# Read a text file
+with open("sample_text.txt", "r", encoding="utf-8") as file:
+    text = file.read()
+print(text[:500])  # Print first 500 characters
+```
+
+---
+
+### ✅ **2. Writing to a File (e.g., Preprocessed Text)**
+
+```python
+cleaned_text = text.lower().replace('\n', ' ')  # Basic cleaning
+
+# Save the cleaned text
+with open("cleaned_text.txt", "w", encoding="utf-8") as file:
+    file.write(cleaned_text)
+```
+
+---
+
+### ✅ **3. Tokenizing Text using NLTK**
+
+```python
+import nltk
+nltk.download('punkt')
+from nltk.tokenize import word_tokenize
+
+tokens = word_tokenize(cleaned_text)
+print(tokens[:20])  # First 20 tokens
+```
+
+---
+
+### ✅ **4. Saving Tokens to a File (JSON Format)**
+
+```python
+import json
+
+with open("tokens.json", "w", encoding="utf-8") as f:
+    json.dump(tokens, f)
+```
+
+---
+
+### ✅ **5. Reading JSON Token File**
+
+```python
+with open("tokens.json", "r", encoding="utf-8") as f:
+    loaded_tokens = json.load(f)
+print(loaded_tokens[:20])
+```
+
+---
+
+### ✅ **6. File Management with Multiple Files (Corpus Handling)**
+
+```python
+import os
+
+# Read all .txt files in a folder
+folder_path = "text_corpus/"
+all_texts = []
+
+for filename in os.listdir(folder_path):
+    if filename.endswith(".txt"):
+        with open(os.path.join(folder_path, filename), "r", encoding="utf-8") as f:
+            all_texts.append(f.read())
+
+print(f"Total documents loaded: {len(all_texts)}")
+```
+
+---
+
+### ✅ Use-case: Save Preprocessed Documents
+
+```python
+preprocessed_dir = "cleaned_corpus/"
+os.makedirs(preprocessed_dir, exist_ok=True)
+
+for i, doc in enumerate(all_texts):
+    clean_doc = doc.lower().replace("\n", " ")
+    with open(f"{preprocessed_dir}/doc_{i+1}.txt", "w", encoding="utf-8") as f:
+        f.write(clean_doc)
+```
