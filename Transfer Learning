@@ -1,0 +1,142 @@
+#### 1. 📌 **Transfer Learning (Pre-trained CNNs like VGG16, ResNet50)**
+
+Use already-trained models to boost your own accuracy on new datasets.
+
+**🔧 Code (using VGG16 on custom dataset):**
+
+```python
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# Load pretrained VGG16 without top layers
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+# Freeze base layers
+for layer in base_model.layers:
+    layer.trainable = False
+
+# Add custom classifier
+x = Flatten()(base_model.output)
+x = Dense(128, activation='relu')(x)
+output = Dense(3, activation='softmax')(x)  # 3 classes example
+
+model = Model(inputs=base_model.input, outputs=output)
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Load your dataset
+train_datagen = ImageDataGenerator(rescale=1./255, validation_split=0.2)
+train_gen = train_datagen.flow_from_directory('dataset/', target_size=(224,224),
+                                              batch_size=32, subset='training')
+val_gen = train_datagen.flow_from_directory('dataset/', target_size=(224,224),
+                                            batch_size=32, subset='validation')
+
+# Train model
+model.fit(train_gen, validation_data=val_gen, epochs=5)
+```
+
+---
+
+#### 2. 📌 **Image Augmentation + CNN**
+
+Helps prevent overfitting and generalizes well.
+
+```python
+datagen = ImageDataGenerator(
+    rescale=1./255,
+    rotation_range=40,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True
+)
+```
+
+---
+
+#### 3. 📌 **Custom CNN for CIFAR-10 Classification**
+
+Dataset with 10 object categories.
+
+```python
+from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+
+# Load dataset
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+y_train, y_test = to_categorical(y_train), to_categorical(y_test)
+
+# Model
+model = Sequential([
+    Conv2D(32, (3,3), activation='relu', input_shape=(32,32,3)),
+    MaxPooling2D(2,2),
+    Conv2D(64, (3,3), activation='relu'),
+    MaxPooling2D(2,2),
+    Dropout(0.3),
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
+```
+
+---
+
+#### 4. 📌 **Object Detection with YOLO (You Only Look Once)**
+
+*Too long to write from scratch here*, but I can generate a `YOLOv8.ipynb` with:
+
+* Installation of `ultralytics`
+* Model training with images & bounding boxes
+* Live object detection code using webcam
+
+Want that?
+
+---
+
+#### 5. 📌 **Grad-CAM (Visualizing CNN Attention)**
+
+To see **what your CNN is actually "looking at"** during prediction.
+
+```python
+# pip install tf-keras-vis
+from tf_keras_vis.gradcam import Gradcam
+from tf_keras_vis.utils.model_modifiers import ReplaceToLinear
+from tf_keras_vis.utils.scores import CategoricalScore
+```
+
+*Let me know if you want a full Grad-CAM notebook as well.*
+
+---
+
+#### 6. 📌 **CNN + LSTM for Video Classification**
+
+CNN extracts frame features, LSTM tracks across time.
+
+Want a short code of that too?
+
+---
+
+### ✅ Folder Suggestion:
+
+```
+CNN_Advanced/
+├── Transfer_Learning_VGG16.ipynb
+├── CIFAR10_CustomCNN.ipynb
+├── Image_Augmentation.ipynb
+├── GradCAM_Visualization.ipynb
+├── YOLOv8_ObjectDetection/
+│   ├── dataset/
+│   ├── train.py
+│   └── detect.py
+├── CNN_LSTM_VideoClassification.ipynb
+```
+
+---
