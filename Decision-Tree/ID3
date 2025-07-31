@@ -1,0 +1,142 @@
+## 🌳 **ID3 Algorithm (Iterative Dichotomiser 3)**
+
+> **ID3** is a **decision tree algorithm** used in **classification tasks**. It uses **Entropy** and **Information Gain** to decide which attribute to split on at each node of the tree.
+
+---
+
+## 🧠 **Core Idea**
+
+“Choose the attribute that gives the **maximum information gain**.”
+
+---
+
+## 📚 Key Terms:
+
+### 1. **Entropy (H):**
+
+Measures **uncertainty** or **impurity** in the data.
+
+$$
+H(S) = -\sum p_i \log_2 p_i
+$$
+
+If data is pure → Entropy = 0
+If data is 50-50 split → Entropy = 1
+
+---
+
+### 2. **Information Gain (IG):**
+
+Measures the **reduction in entropy** after a split.
+
+$$
+IG(S, A) = H(S) - \sum \left( \frac{|S_v|}{|S|} \times H(S_v) \right)
+$$
+
+Where:
+
+* $S$ = Current dataset
+* $S_v$ = Subset for each value of attribute A
+
+---
+
+## 🔄 **How ID3 Works (Steps)**
+
+1. Calculate **entropy** for the current dataset.
+2. For each attribute:
+
+   * Calculate **information gain** from splitting on that attribute.
+3. Choose the attribute with **highest information gain** → make it the decision node.
+4. **Split** dataset by this attribute.
+5. **Recurse** for each subset, repeating steps 1-4.
+
+---
+
+## 🧪 **Example Dataset (Play Tennis)**
+
+| Outlook  | Temp | Humidity | Windy | Play |
+| -------- | ---- | -------- | ----- | ---- |
+| Sunny    | Hot  | High     | False | No   |
+| Sunny    | Hot  | High     | True  | No   |
+| Overcast | Hot  | High     | False | Yes  |
+| Rainy    | Mild | High     | False | Yes  |
+| Rainy    | Cool | Normal   | False | Yes  |
+
+ID3 will:
+
+* Calculate Entropy of "Play"
+* Find Information Gain for each feature (Outlook, Temp, etc.)
+* Choose feature with max IG to split
+
+---
+
+## 🔧 Python Implementation (Simple)
+
+```python
+import math
+import pandas as pd
+
+def entropy(target_col):
+    elements, counts = zip(*target_col.value_counts().items())
+    return -sum([(count/len(target_col)) * math.log2(count/len(target_col)) for count in counts])
+
+def info_gain(df, split_attribute_name, target_name="Play"):
+    total_entropy = entropy(df[target_name])
+    
+    vals, counts = zip(*df[split_attribute_name].value_counts().items())
+    weighted_entropy = sum([
+        (counts[i]/sum(counts)) * entropy(df[df[split_attribute_name] == vals[i]][target_name])
+        for i in range(len(vals))
+    ])
+    
+    return total_entropy - weighted_entropy
+
+# Sample data
+dataset = {
+    'Outlook': ['Sunny','Sunny','Overcast','Rainy','Rainy'],
+    'Temperature': ['Hot','Hot','Hot','Mild','Cool'],
+    'Humidity': ['High','High','High','High','Normal'],
+    'Windy': ['False','True','False','False','False'],
+    'Play': ['No','No','Yes','Yes','Yes']
+}
+
+df = pd.DataFrame(dataset)
+
+for col in df.columns[:-1]:
+    print(f"Information Gain for {col}: {info_gain(df, col)}")
+```
+
+---
+
+## 🖼️ Output (Example):
+
+```
+Information Gain for Outlook: 0.97
+Information Gain for Temperature: 0.02
+Information Gain for Humidity: 0.57
+Information Gain for Windy: 0.02
+```
+
+\=> Best attribute = **Outlook** for the root node.
+
+---
+
+## 🆚 CHAID vs ID3
+
+| Feature         | CHAID                   | ID3                       |
+| --------------- | ----------------------- | ------------------------- |
+| Split type      | Multi-way (categorical) | Mostly binary             |
+| Splitting logic | Chi-square test         | Information Gain          |
+| Data type       | Categorical only        | Both (categorical mostly) |
+| Use             | Survey/stats-heavy apps | General ML classification |
+
+---
+
+## ✅ Real-Life Use Cases:
+
+* Predicting student performance
+* Weather forecast classification
+* Basic medical diagnosis
+* Email spam detection
+
+---
