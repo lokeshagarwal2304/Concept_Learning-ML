@@ -1,0 +1,86 @@
+# ⚙️ Rendering Techniques in Web Development – SSR vs CSR vs SSG
+
+> *Understand the core rendering strategies and when to use each for building modern web apps with speed, SEO, and performance in mind.*
+
+---
+
+## 📖 Concept Overview
+
+Rendering defines **how your content is prepared and shown to the user** — either on the server, the client, or ahead of time as static HTML. Below is a breakdown of the three most used methods:
+
+---
+
+## 📈 Comparison Table
+
+| Feature/Aspect             | SSR (Server-Side Rendering)                            | CSR (Client-Side Rendering)                       | SSG (Static Site Generation)                 |
+| -------------------------- | ------------------------------------------------------ | ------------------------------------------------- | -------------------------------------------- |
+| 📍 Where rendering happens | Server (on every request)                              | Browser (after JS loads)                          | At build time (before deployment)            |
+| 🧠 How it works            | Server builds the page HTML on every request           | Sends empty HTML, then loads JS & data on browser | Pre-builds HTML files for each page          |
+| 🚀 Performance             | Slower initial load, but faster interaction            | Fast after JS loads, but poor initial performance | Very fast loading (no server involved)       |
+| 🌐 SEO Friendly            | ✅ Yes – HTML is ready on first load                    | ❌ No – bots may not wait for JS                   | ✅ Yes – pages are pre-rendered               |
+| 🗕️ When to use            | Dynamic content that changes per user (e.g. dashboard) | Web apps with lots of user interaction, SPAs      | Blogs, docs, landing pages, static content   |
+| 🔁 Data freshness          | Fresh on every request                                 | Depends on API fetch timing                       | Stale unless rebuilt or revalidated          |
+| 🧰 Examples                | Next.js with `getServerSideProps`                      | React app with REST or GraphQL                    | Next.js with `getStaticProps` + revalidation |
+
+---
+
+## 💡 Use Cases
+
+* **SSR:** eCommerce product pages, dashboards, dynamic search results
+* **CSR:** Admin panels, interactive dashboards, private routes
+* **SSG:** Blogs, portfolios, marketing pages, documentation
+
+---
+
+## 🧪 Real-World Code Usage (Next.js)
+
+```tsx
+// ✅ SSR in Next.js
+export async function getServerSideProps(context) {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+  return { props: { data } };
+}
+```
+
+```tsx
+// ✅ SSG in Next.js
+export async function getStaticProps() {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+  return { props: { data }, revalidate: 60 }; // ISR
+}
+```
+
+```tsx
+// ✅ CSR in React
+useEffect(() => {
+  fetch("/api/data").then(res => res.json()).then(setData);
+}, []);
+```
+
+---
+
+## 🧠 Pro Tip (Best of All Worlds)
+
+Next.js lets you **mix & match**:
+
+* Use **SSG** for static pages
+* Use **SSR** for dynamic pages
+* Use **CSR** for interactive components
+
+This way, your app stays **fast, dynamic, and SEO-friendly**!
+
+---
+
+## 📌 Summary
+
+Choose your rendering strategy based on:
+
+* **How often content updates**
+* **Whether SEO is important**
+* **What level of user interaction is needed**
+
+---
+
+> Made with ❤️ by [Lokesh Agarwal](https://github.com/lokeshagarwal2304)
