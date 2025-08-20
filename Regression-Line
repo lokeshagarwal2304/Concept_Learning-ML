@@ -1,0 +1,64 @@
+# 📈 Regression Line
+
+A **Regression Line** is a straight line that best fits the data points on a scatter plot, showing the relationship between two variables.  
+It is widely used in **statistics** and **machine learning** to make predictions.
+
+---
+
+## 🔹 Definition
+A regression line represents the relationship between an **independent variable (X)** and a **dependent variable (Y)**.  
+The general equation of a regression line is:
+
+\[
+Y = mX + c
+\]
+
+Where:
+- **Y** = Dependent variable (predicted value)  
+- **X** = Independent variable  
+- **m** = Slope of the line  
+- **c** = Intercept (value of Y when X = 0)  
+
+---
+
+## 🔹 Steps to Find the Regression Line
+1. Collect dataset with input (X) and output (Y).  
+2. Plot data points on a graph.  
+3. Apply the **Least Squares Method** to minimize the sum of squared errors.  
+4. Derive slope (m) and intercept (c).  
+
+Formulas:  
+\[
+m = \frac{N\sum XY - \sum X \sum Y}{N\sum X^2 - (\sum X)^2}
+\]
+
+\[
+c = \frac{\sum Y - m \sum X}{N}
+\]
+
+---
+
+## 🔹 Example
+Suppose we have the following data:
+
+| X | Y |
+|---|---|
+| 1 | 2 |
+| 2 | 4 |
+| 3 | 5 |
+| 4 | 4 |
+| 5 | 5 |
+
+Using regression formulas, we can calculate **m** and **c** to form the regression line equation.
+
+---
+
+## 🔹 Applications
+- 📊 Predicting sales, prices, or demand.  
+- 🏥 Healthcare (predicting patient risk factors).  
+- 💹 Finance (forecasting stock prices).  
+- 🌦️ Weather prediction.  
+
+---
+
+## 🔹 Visualization (Conceptual)
