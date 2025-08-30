@@ -13,6 +13,12 @@ A* (A-Star) is a popular pathfinding and graph traversal algorithm. It uses a co
 The node with the lowest `f(n)` is picked at every step.
 
 ---
+
+
+
+
+
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
